@@ -10,8 +10,8 @@ with open('Sample_data/driving_log.csv') as csvfile:
         if line[0] != 'center':
             samples.append(line)
         # for testing implementation only, need to be removed
-        if len(samples)>100:
-            break
+        #if len(samples)>100:
+        #    break
 
 from sklearn.model_selection import train_test_split
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
@@ -88,12 +88,13 @@ checkpoint = ModelCheckpoint(file_path_model, monitor='val_loss', verbose=1, sav
 callbacks_list = [checkpoint]
 
 model.compile(loss='mse', optimizer='adam')
-#history_object = model.fit_generator(train_generator, samples_per_epoch= \
-#            len(train_samples), validation_data=validation_generator, \
-#            nb_val_samples=len(validation_samples), nb_epoch=3, verbose=1)
-history_object = model.fit_generator(train_generator, steps_per_epoch= len(train_samples), \
-                 validation_data=validation_generator, validation_steps=len(validation_samples), \
-                 callbacks = callbacks_list, epochs=5, verbose = 1)
+history_object = model.fit_generator(train_generator, samples_per_epoch= \
+            len(train_samples), validation_data=validation_generator, \
+            nb_val_samples=len(validation_samples), nb_epoch=5, \
+            callbacks = callbacks_list, verbose=1)
+#history_object = model.fit_generator(train_generator, steps_per_epoch= len(train_samples), \
+#                 validation_data=validation_generator, validation_steps=len(validation_samples), \
+#                 callbacks = callbacks_list, epochs=5, verbose = 1)
 
 
 ### print the keys contained in the history object
