@@ -66,7 +66,8 @@ model.add(Dense(1))
 # model checkpoint
 now = datetime.datetime.now()
 datenow = now.strftime("%Y-%m-%d-")
-file_path_model = "Model_checkpoints/" + datenow + "model-weights-{epoch:02d}-{val_loss:0.2f}.hdf5"
+#file_path_model = "Model_checkpoints/" + datenow + "model-weights-{epoch:02d}-{val_loss:0.2f}.hdf5"
+file_path_model = "Model_checkpoints/" + datenow + "model-weights.hdf5"
 checkpoint = ModelCheckpoint(file_path_model, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
 callbacks_list = [checkpoint]
 
