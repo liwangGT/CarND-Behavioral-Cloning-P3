@@ -41,10 +41,10 @@ def generator(samples, batch_size=32):
                 images.append(center_image)
                 angles.append(center_angle)
                 # flip image to augment data
-                #image_flipped = np.fliplr(center_image)
-                #angle_flipped = -center_angle
-                #images.append(image_flipped)
-                #angles.append(angle_flipped)
+                image_flipped = np.fliplr(center_image)
+                angle_flipped = -center_angle
+                images.append(image_flipped)
+                angles.append(angle_flipped)
                 # use left and right camera to augment data
 
             # trim image to only see section with road
@@ -90,7 +90,7 @@ callbacks_list = [checkpoint]
 model.compile(loss='mse', optimizer='adam')
 history_object = model.fit_generator(train_generator, samples_per_epoch= \
             len(train_samples), validation_data=validation_generator, \
-            nb_val_samples=len(validation_samples), nb_epoch=5, \
+            nb_val_samples=len(validation_samples), nb_epoch=10, \
             callbacks = callbacks_list, verbose=1)
 #history_object = model.fit_generator(train_generator, steps_per_epoch= len(train_samples), \
 #                 validation_data=validation_generator, validation_steps=len(validation_samples), \
