@@ -34,18 +34,32 @@ def generator(samples, batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
+                # append center image
                 name = 'Sample_data/IMG/'+batch_sample[0].split('/')[-1]
                 center_image = cv2.imread(name)
-                #print("The angle is ", batch_sample[3]) 
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
-                # flip image to augment data
-                image_flipped = np.fliplr(center_image)
-                angle_flipped = -center_angle
-                images.append(image_flipped)
-                angles.append(angle_flipped)
-                # use left and right camera to augment data
+                correction = 0.2 # shift angle commands
+                # append left camera image
+                left_angle = center_angle + correction
+                lname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
+                left_image = cv2.imread(lname)
+                images.append(left_image)
+                angles.append(left_angle)
+                
+                # append right camera image
+                right_angle = center_angle + correction
+                rname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
+                right_image = cv2.imread(rname)
+                images.append(right_image)
+                angles.append(right_angle)
+
+            # flip image to augment data
+            Nsample = len(angles)
+            for i in range(len(angles)):
+                images.append(np.fliplr(images[i]))
+                angles.append(-angles[i])
 
             # trim image to only see section with road
             X_train = np.array(images)
