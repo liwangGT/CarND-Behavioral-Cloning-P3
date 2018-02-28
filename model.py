@@ -10,8 +10,8 @@ with open('Sample_data/driving_log.csv') as csvfile:
         if line[0] != 'center':
             samples.append(line)
         # for testing implementation only, need to be removed
-        if len(samples)>100:
-            break
+        #if len(samples)>100:
+        #    break
 
 from sklearn.model_selection import train_test_split
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
