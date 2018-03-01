@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import sklearn
 from keras.models import Sequential, Model
-from keras.layers import Lambda, Input, Flatten, Dense, Cropping2D, Convolution2D
+from keras.layers import Lambda, Input, Flatten, Dense, Cropping2D, Convolution2D, Dropout
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -28,6 +28,7 @@ def genModel():
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Flatten())
+    model.add(Dropout(0.4))
     model.add(Dense(100))
     model.add(Dense(50))
     model.add(Dense(10))
