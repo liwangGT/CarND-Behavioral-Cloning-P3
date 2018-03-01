@@ -31,16 +31,16 @@ def genModel():
     model.add(Cropping2D(cropping=((50,30), (0,0))))
     # Preprocess incoming data, centered around zero with small standard deviation 
     model.add(Lambda(lambda x: x/127.5 - 1., output_shape= oup2))
-    model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
-    model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
-    model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
+    model.add(Convolution2D(24,3,6,subsample=(2,2), activation="relu"))
+    model.add(Convolution2D(36,3,6,subsample=(2,2), activation="relu"))
+    model.add(Convolution2D(48,3,6,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Convolution2D(96,3,3, activation="relu"))
     model.add(Flatten())
     model.add(Dropout(0.2))
-    model.add(Dense(120))
-    model.add(Dense(60, activation="relu"))
-    model.add(Dense(10))
+    model.add(Dense(120, activation="relu"))
+    model.add(Dense(60))
+    model.add(Dense(10, activation="relu"))
     model.add(Dense(1))
     # print layer size for each model layers
     for layer in model.layers:
