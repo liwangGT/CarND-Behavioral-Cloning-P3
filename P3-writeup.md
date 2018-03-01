@@ -55,61 +55,57 @@ Note that the CNN model only generates steering angle, the throttle command is g
 
 The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). 
 
-
-    model.add(Lambda(color2gray, input_shape = inp, output_shape= oup1))
-    # crop top 50 pixels, bottom 30 pixels, left/right 0 pixels
-    model.add(Cropping2D(cropping=((50,30), (0,0))))
-    # Preprocess incoming data, centered around zero with small standard deviation 
-    model.add(Lambda(lambda x: x/127.5 - 1., output_shape= oup2))
-    model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
-    model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
-    model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
-    model.add(Convolution2D(64,3,3, activation="relu"))
-    model.add(Convolution2D(96,3,3, activation="relu"))
-    model.add(Flatten())
-    model.add(Dropout(0.2))
-    model.add(Dense(120))
-    model.add(Dense(60, activation="relu"))
-    model.add(Dense(10))
-    model.add(Dense(1))
-
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 160x320x3 color image   					| 
 | Lambda                        | convert color to grayscale, outputs 160x320x1  |
 | Cropping2D                    | cropping the image to color image, outputs 80x320x1  |
 | Lambda                        | normalize the pixel data to [-1, 1], outputs 80x320x1  |
-| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 39x158x24 	|
+| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 76x158x24 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 19x77x36 	|
+| Convolution2D 5x5     	| 2x2 stride, valid padding, outputs 36x77x36 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 9x36x48 	|
+| Convolution2D 5x5     	| 2x2 stride, valid padding, outputs 16x37x48 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 7x34x64 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 14x35x64 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 5x32x96 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 12x33x96 	|
 | RELU				| introduce nonlinearity	    				|
-| Flatten                       | output 9504                                    |
+| Flatten                       | output 38016                                    |
 | Dropout                       | keep probability = 0.8                        |
 | Fully connected		| output 100        									|
+| RELU				| introduce nonlinearity	    				|
 | Fully connected		| output 50        									|
 | Fully connected               | output 10                                            |
+| RELU				| introduce nonlinearity	    				|
 | Fully connected               | output 1                                            |
 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+Overfitting of the model is reduced in two ways: 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+* The collected data is shuffled and split into training and validation data sets. In the end the optimized CNN model is tested by running on the car simulator. 
+
+* A dropout layer is inserted in the model to make the network fault tolerant and reduce overfitting.
+
+* Both counter clockwise and clockwise driving data are included to avoid overfitting the steering angle to one side.
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually. The epoch number is tuned such that the validation loss is minimized without overfitting. The dropout layer drop rate is tuned to further improve the validation accuracy and reduce overfitting.
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+The training data are generated to support CNN model training:
+
+* Both counter clockwise and clockwise driving data are collected to avoid overfitting steering angle to one side. Three laps of counter clockwise driving data and one lap of clockwise driving data are included in the data set.
+
+* The center, left, and right camera images are all used in the training. The left and right camera data are rectified by adding a biase into the steering angle, such that the car learns how to recover after running off the road.
+
+* The images are mirrored with a negative steering angle to increase the quantity of training data.
+
+
 
 For details about how I created the training data, see the next section. 
 

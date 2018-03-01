@@ -32,10 +32,10 @@ def genModel():
     # Preprocess incoming data, centered around zero with small standard deviation 
     model.add(Lambda(lambda x: x/127.5 - 1., output_shape= oup2))
     model.add(Convolution2D(24,5,5,subsample=(1,2), activation="relu"))
-    model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
+    model.add(Convolution2D(32,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
+    model.add(Convolution2D(56,3,3, activation="relu"))
     model.add(Convolution2D(64,3,3, activation="relu"))
-    model.add(Convolution2D(96,3,3, activation="relu"))
     model.add(Flatten())
     model.add(Dropout(0.2))
     model.add(Dense(120, activation="relu"))
@@ -85,7 +85,7 @@ def generator(samples, batch_size=32):
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
-                correction = 0.3 # shift angle commands
+                correction = 0.25 # shift angle commands
                 # append left camera image
                 left_angle = center_angle + correction
                 lname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
