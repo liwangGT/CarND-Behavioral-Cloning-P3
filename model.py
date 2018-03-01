@@ -14,9 +14,8 @@ def genModel():
     """
     generate CNN model (based on NVIDIA self driving car)
     """
-    #ch, row, col = 3, 80, 320  # Trimmed image format
-    inp = (160, 320, 3)
-    oup = (80, 320, 3)
+    inp = (160, 320, 3) # initial image size
+    oup = (80, 320, 3) # cropped image size
 
     model = Sequential()
     # crop top 50 pixels, bottom 30 pixels, left/right 0 pixels
@@ -73,7 +72,7 @@ def generator(samples, batch_size=32):
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
-                correction = 0.2 # shift angle commands
+                correction = 0.3 # shift angle commands
                 # append left camera image
                 left_angle = center_angle + correction
                 lname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
@@ -110,7 +109,7 @@ def loadRawData():
             # skip the first line, which is the title line
             if line[0] != 'center':
                 samples.append(line)
-            # for testing implementation only, need to be removed
+            # for testing implementation only, commented for GPU training
             #if len(samples)>100:
             #    break
     train_samples, validation_samples = train_test_split(samples, test_size=0.2)
@@ -123,7 +122,6 @@ def trainModel(model, train_raw, validation_raw):
     # compile and train the model using the generator function
     train_generator = generator(train_raw, batch_size=32)
     validation_generator = generator(validation_raw, batch_size=32)
-
 
     # model checkpoint
     now = datetime.datetime.now()
@@ -144,9 +142,6 @@ def trainModel(model, train_raw, validation_raw):
     #                 validation_data=validation_generator, validation_steps=nvalid, \
     #                 callbacks = callbacks_list, epochs=5, verbose = 1)    
     return history_object
-
-
-
 
 
 if __name__ == "__main__":
