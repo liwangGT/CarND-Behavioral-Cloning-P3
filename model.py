@@ -8,20 +8,28 @@ from keras.models import Sequential, Model
 from keras.layers import Lambda, Input, Flatten, Dense, Cropping2D, Convolution2D, Dropout
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from sklearn.model_selection import train_test_split
+
+def color2gray(xin):
+    """
+    convert color image to gray
+    """
+    return (0.21*xin[:,:,:1] +0.72*xin[:,:,1:2]+0.07*xin[:,:,-1:])
 
 def genModel():
     """
     generate CNN model (based on NVIDIA self driving car)
     """
     inp = (160, 320, 3) # initial image size
-    oup = (80, 320, 3) # cropped image size
+    oup = (160, 320, 1) # cropped image size
 
     model = Sequential()
+    model.add(Lambda(color2gray, input_shape = inp, output_shape= oup))
     # crop top 50 pixels, bottom 30 pixels, left/right 0 pixels
-    model.add(Cropping2D(cropping=((50,30), (0,0)), input_shape=inp))
+    model.add(Cropping2D(cropping=((50,30), (0,0))))
     # Preprocess incoming data, centered around zero with small standard deviation 
-    model.add(Lambda(lambda x: x/127.5 - 1., input_shape=inp, output_shape=oup))
+    model.add(Lambda(lambda x: x/127.5 - 1., input_shape= oup, output_shape= oup))
     model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
