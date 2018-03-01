@@ -79,15 +79,15 @@ The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nv
 | Lambda                        | convert color to grayscale, outputs 160x320x1  |
 | Cropping2D                    | cropping the image to color image, outputs 80x320x1  |
 | Lambda                        | normalize the pixel data to [-1, 1], outputs 80x320x1  |
-| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 38x158x24 	|
+| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 39x158x24 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 17x77x36 	|
+| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 19x77x36 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 7x37x48 	|
+| Convolution2D 5x5     	| 1x2 stride, valid padding, outputs 9x36x48 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 5x35x64 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 7x34x64 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 3x33x96 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 5x32x96 	|
 | RELU				| introduce nonlinearity	    				|
 | Flatten                       | output 9504                                    |
 | Dropout                       | keep probability = 0.8                        |
