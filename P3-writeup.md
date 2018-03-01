@@ -56,38 +56,40 @@ Note that the CNN model only generates steering angle, the throttle command is g
 The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). 
 
 
+    model.add(Lambda(color2gray, input_shape = inp, output_shape= oup1))
     # crop top 50 pixels, bottom 30 pixels, left/right 0 pixels
-    model.add(Cropping2D(cropping=((50,30), (0,0)), input_shape=inp))
+    model.add(Cropping2D(cropping=((50,30), (0,0))))
     # Preprocess incoming data, centered around zero with small standard deviation 
-    model.add(Lambda(lambda x: x/127.5 - 1., input_shape=inp, output_shape=oup))
+    model.add(Lambda(lambda x: x/127.5 - 1., output_shape= oup2))
     model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
     model.add(Convolution2D(64,3,3, activation="relu"))
-    model.add(Convolution2D(64,3,3, activation="relu"))
+    model.add(Convolution2D(96,3,3, activation="relu"))
     model.add(Flatten())
-    model.add(Dropout(0.4))
-    model.add(Dense(100))
-    model.add(Dense(50))
+    model.add(Dropout(0.2))
+    model.add(Dense(120))
+    model.add(Dense(60, activation="relu"))
     model.add(Dense(10))
     model.add(Dense(1))
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 160x320x3 color image   					| 
-| Cropping2D                    | cropping the image to 80x320x3 color image  |
-| Lambda                        | normalize the pixel data to [-1, 1]  |
-| Convolution2D 5x5     	| 2x2 stride, valid padding, outputs 28x28x24 	|
+| Lambda                        | convert color to grayscale, outputs 160x320x1  |
+| Cropping2D                    | cropping the image to color image, outputs 80x320x1  |
+| Lambda                        | normalize the pixel data to [-1, 1], outputs 80x320x1  |
+| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 38x158x24 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 5x5     	| 2x2 stride, valid padding, outputs 28x28x36 	|
+| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 17x77x36 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 5x5     	| 2x2 stride, valid padding, outputs 28x28x48 	|
+| Convolution2D 3x6     	| 2x2 stride, valid padding, outputs 7x37x48 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 28x28x64 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 5x35x64 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 28x28x64 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 3x33x96 	|
 | RELU				| introduce nonlinearity	    				|
-| Flatten                       | output 800                                    |
+| Flatten                       | output 9504                                    |
 | Dropout                       | keep probability = 0.8                        |
 | Fully connected		| output 100        									|
 | Fully connected		| output 50        									|
