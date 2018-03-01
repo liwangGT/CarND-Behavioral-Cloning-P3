@@ -69,9 +69,9 @@ The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nv
 | RELU				| introduce nonlinearity	    				|
 | Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 14x35x64 	|
 | RELU				| introduce nonlinearity	    				|
-| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 12x33x96 	|
+| Convolution2D 3x3     	| 1x1 stride, valid padding, outputs 12x33x64 	|
 | RELU				| introduce nonlinearity	    				|
-| Flatten                       | output 38016                                    |
+| Flatten                       | output 25344                                    |
 | Dropout                       | keep probability = 0.8                        |
 | Fully connected		| output 100        									|
 | RELU				| introduce nonlinearity	    				|
