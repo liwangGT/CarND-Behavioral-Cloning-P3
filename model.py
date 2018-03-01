@@ -73,7 +73,7 @@ def generator(samples, batch_size=32):
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
-                correction = 0.2 # shift angle commands
+                correction = 0.3 # shift angle commands
                 # append left camera image
                 left_angle = center_angle + correction
                 lname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
