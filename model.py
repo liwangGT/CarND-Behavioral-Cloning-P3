@@ -28,7 +28,7 @@ def genModel():
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Flatten())
-    model.add(Dropout(0.4))
+    model.add(Dropout(0.2))
     model.add(Dense(100))
     model.add(Dense(50))
     model.add(Dense(10))
