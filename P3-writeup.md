@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [image6]: ./examples/left.jpg "left"
 [image7]: ./examples/right.jpg "right"
 [image8]: ./examples/curve_road.png "curve"
-[iamge9]: ./examples/CNN_NVIDIA.png "CNN"
+[image9]: ./examples/CNN_NVIDIA.png "CNN"
 
 
 ---
@@ -185,7 +185,7 @@ We have achieved simple end-to-end learning based self driving in this project. 
 
 * Associate the steering angle data with current speed of the car. Intuitively, we steer the car much less when driving on the highway with high speed than driving on the city road with low speed. This means that the steering angle output of the CNN model should be less aggressive when the speed is high. We might want to have a two output (steering angle and throttle) CNN model to deal with this problem.
 
-* left/right/center biase = f(Dist_camera, speed)
+* Develp an analytical model for using training images from left and right cameras. Currently, a heuristic biase constant is added/substracted from the left/right image steering angle. During the develpment of the  f(Dist_camera, speed)
 
 * Adjust the distribution of training data based on road curvature. While collecting driving data, we can add a parameter for road curvature. Currently, lots of data frames are for straight road driving, which leads to overfitting in zero steering situation. By ploting the road curvature distribution, we can remove some straight driving data or augment curve driving data.
 
