@@ -38,7 +38,7 @@ def genModel():
     model.add(Convolution2D(64,3,3, activation="relu"))
     model.add(Flatten())
     model.add(Dropout(0.3))
-    model.add(Dense(120, activation="relu"))
+    model.add(Dense(180, activation="relu"))
     model.add(Dense(60))
     model.add(Dense(10, activation="relu"))
     model.add(Dense(1))
@@ -85,7 +85,7 @@ def generator(samples, batch_size=32):
                 center_angle = float(batch_sample[3])
                 images.append(center_image)
                 angles.append(center_angle)
-                correction = 0.25 # shift angle commands
+                correction = 0.30 # shift angle commands
                 # append left camera image
                 left_angle = center_angle + correction
                 lname = 'Sample_data/IMG/'+batch_sample[1].split('/')[-1]
