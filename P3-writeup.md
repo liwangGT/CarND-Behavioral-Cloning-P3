@@ -148,14 +148,11 @@ To teach the car how to recover from off road conditions, the left and right cam
 ![right][image7]
 
 
-It is found that still run off at curve road
-![off road][image5]
-
-curve road, revere lap
+It is found that a curvy part of the road is particularly difficult for the autonoumous car to deal with. The car almost always run off the road from this place. The reason might be that too much straight lane driving data is included. The learned driving behavior is overfitted to steering angle of 0. To overcome this issue more data are collected at the curvy parts of the road. A revere lap is also recorded avoid overfitting the left steering angle.
 ![curve][image8]
 
 
-After combining all collected training data (2 forward laps, 1 reverse laps, curvy parts, left/right cameras) and preprocessing (cropping, mirroring, grayscale), I feed the data into keras CNN training function. With all these techniques, there are a total of 66240 training datesets. A random part of the training is splitted as validation data. The final run on the car simulator is considered as the testing data.  
+After combining all collected training data (2 forward laps, 1 reverse laps, curvy parts, left/right cameras) and preprocessing (cropping, mirroring, grayscale), I feed the data into keras CNN training function. With all these techniques, there are a total of 66240 training datesets. A random part of the training is splitted as validation data. The final run on the car simulator is considered as the testing data.
 
 The Adam optimizer is picked to automatically determine model learning rates. The Epoch number is determined to make sure that the validation loss is lowest without overfitting the training data set. To avoid excessive memory usage, generator function is adopted for loading training data into batches. The training is performed on the GPU instance of Amazon Elastic Computing Cloud.
 
