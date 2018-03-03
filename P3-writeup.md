@@ -55,7 +55,7 @@ Note that the CNN model only generates steering angle, the throttle command is g
 
 #### 1. An appropriate model architecture has been employed
 
-The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). Additional Dropout layer is added to reduce overfitting, while multiple RELU layer are added to introduce nonlinearity.The convolution layers are adjusted to get closer to square outputs at each layer (note original iamge has).
+The CNN model is adapted from [NVIDIA's self driving car paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). Additional Dropout layer is added to reduce overfitting, while multiple RELU layer are added to introduce nonlinearity. The convolution layers are adjusted to get closer to square outputs at each layer (note original images width:height = 4:1).
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
@@ -143,7 +143,7 @@ Since the top part and bottom part of the figure are irrelevant to the driving b
 ![crop][image3]
 ![flip][image4]
 
-To teach the car how to recover from off road conditions, the left and right cameras are .
+To teach the car how to recover from off road conditions, the left and right cameras' data are also included into the data set. It is determined that a shift of 0.3 radiance should be added to the steering angle of the center image to get appropriate recovery behavior.
 ![left][image6]
 ![right][image7]
 
@@ -155,13 +155,11 @@ curve road, revere lap
 ![curve][image8]
 
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+After combining all collected training data (2 forward laps, 1 reverse laps, curvy parts, left/right cameras) and preprocessing (cropping, mirroring, grayscale), I feed the data into keras CNN training function. With all these techniques, there are a total of 66240 training datesets. A random part of the training is splitted as validation data. The final run on the car simulator is considered as the testing data.  
 
+The Adam optimizer is picked to automatically determine model learning rates. The Epoch number is determined to make sure that the validation loss is lowest without overfitting the training data set. To avoid excessive memory usage, generator function is adopted for loading training data into batches. The training is performed on the GPU instance of Amazon Elastic Computing Cloud.
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+The final training result is shown below:
 
 Epoch 1/5
 66048/66240 [============================>.] - ETA: 0s - loss: 0.0263Epoch 00000: val_loss improved from inf to 0.01885, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
@@ -197,4 +195,4 @@ We have achieved simple end-to-end learning based self driving in this project. 
 
 * Adjust the distribution of training data based on road curvature. While collecting driving data, we can add a parameter for road curvature. Currently, lots of data frames are for straight road driving, which leads to overfitting in zero steering situation. By ploting the road curvature distribution, we can remove some straight driving data or augment curve driving data.
 
-End-to-end learning provides a great alternative for controlling self-driving cars. It requires minimal knowledge about the physics of the car and the environment. However, it is still not clear to me how this method can deal with lane changing, dynamical obstacles, and other more complex scenarios.  
+End-to-end learning provides a great alternative for controlling self-driving cars. It requires minimal knowledge about the physics of the car and the environment. However, it is still not clear to me how this method can deal with lane changing, dynamical obstacles, and other more complex scenarios.
