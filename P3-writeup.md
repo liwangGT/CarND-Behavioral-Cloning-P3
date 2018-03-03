@@ -33,7 +33,7 @@ The goals / steps of this project are the following:
 My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
+* model.hdf5 containing a trained convolution neural network 
 * P3-writeup.md summarizing the results
 
 #### 2. To run the code
@@ -101,7 +101,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually. T
 
 The training data are generated to support CNN model training:
 
-* Both counter clockwise and clockwise driving data are collected to avoid overfitting steering angle to one side. Three laps of counter clockwise driving data and one lap of clockwise driving data are included in the data set.
+* Both counter clockwise and clockwise driving data are collected to avoid overfitting steering angle to one side. Two laps of counter clockwise driving data and one lap of clockwise driving data are included in the data set.
 
 * The center, left, and right camera images are all used in the training. The left and right camera data are rectified by adding a biase into the steering angle, such that the car learns how to recover after running off the road.
 
@@ -121,62 +121,70 @@ I took an iterative approach to improve the design of the CNN model.
 
 I started with the LeNet model for traffic sign classification and removed the final softmax function to get steering angles. The car can follow straight lanes reasonably well, but frequently ran of the road at curves in the simulator. After playing with the model parameters for a long time, it was decided that the LeNet model is not rich enough for self-driving purpose.
 
-Then I switched to [NVIDIA's end-to-end self driving car CNN model](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). This model has significantly more layers and parameters to tune. With the initial dataset and some simple data augmentation techniques, the .
+Then I switched to [NVIDIA's end-to-end self driving car CNN model](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). This model has significantly more layers and parameters to tune. With the initial dataset and some simple data augmentation techniques, the autonomous car can finish half of the lap. To increase the accuracy of this model, I increased the number of neurons in some layers and inserted several relu layers to incorporate some nonlinearity. The overfitting problem is handled by adding a dropout layer. The final model is a improved CNN model based on NVIDIA's CNN model.
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final CNN model is consist of 5 convolutional layers, 4 fully connected layers, 2 Lambda layers, and several Relu and dropout layers. The finial output is a steering angle to the autonomous car.
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+A illustration of the final CNN model is shown below.
+![CNN][image9]
 
 #### 3. Creation of the Training Set & Training Process
+Besides creating an approriate CNN model, a large part of effort is devoted to generate good training data for autonomous driving. Since the learned model can only do as good as the training data, producing excellent training data is cruicial to the success of the project.
 
-Original image
+Two laps of counter clockwise driving data are recored as the initial training data. It is found that color information does not contribute too much to the training accuracy. So the training image are converted into grayscale image.
+
 ![example][image1]
-Convert to gray
 ![gray][image2]
-crop image
+
+Since the top part and bottom part of the figure are irrelevant to the driving behavior, these parts are cropped from the original. In addition, the image is mirrored (with reverse steering angle) to provide more training data.
+
 ![crop][image3]
-flip image
 ![flip][image4]
-center
-![center][image5]
-left
+
+To teach the car how to recover from off road conditions, the left and right cameras are .
 ![left][image6]
-right
 ![right][image7]
-curve
+
+
+It is found that still run off at curve road
+![off road][image5]
+
+curve road, revere lap
 ![curve][image8]
-CNN model
-![CNN][image9]
+
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
 
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+Epoch 1/5
+66048/66240 [============================>.] - ETA: 0s - loss: 0.0263Epoch 00000: val_loss improved from inf to 0.01885, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
+66240/66240 [==============================] - 248s - loss: 0.0263 - val_loss: 0.0189
+
+Epoch 2/5
+66048/66240 [============================>.] - ETA: 0s - loss: 0.0195Epoch 00001: val_loss improved from 0.01885 to 0.01813, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
+66240/66240 [==============================] - 244s - loss: 0.0195 - val_loss: 0.0181
+
+Epoch 3/5
+66048/66240 [============================>.] - ETA: 0s - loss: 0.0179Epoch 00002: val_loss improved from 0.01813 to 0.01680, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
+66240/66240 [==============================] - 244s - loss: 0.0179 - val_loss: 0.0168
+
+Epoch 4/5
+66048/66240 [============================>.] - ETA: 0s - loss: 0.0161Epoch 00003: val_loss improved from 0.01680 to 0.01637, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
+66240/66240 [==============================] - 244s - loss: 0.0161 - val_loss: 0.0164
+
+Epoch 5/5
+66048/66240 [============================>.] - ETA: 0s - loss: 0.0146Epoch 00004: val_loss improved from 0.01637 to 0.01597, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
+66240/66240 [==============================] - 243s - loss: 0.0146 - val_loss: 0.0160
+
+
+
 
 
 #### 4. Discussion for Possible Improvements
@@ -185,7 +193,7 @@ We have achieved simple end-to-end learning based self driving in this project. 
 
 * Associate the steering angle data with current speed of the car. Intuitively, we steer the car much less when driving on the highway with high speed than driving on the city road with low speed. This means that the steering angle output of the CNN model should be less aggressive when the speed is high. We might want to have a two output (steering angle and throttle) CNN model to deal with this problem.
 
-* Develp an analytical model for using training images from left and right cameras. Currently, a heuristic biase constant is added/substracted from the left/right image steering angle. During the develpment of the  f(Dist_camera, speed)
+* Develp an analytical model for using training images from left and right cameras. Currently, a heuristic biase constant is added/substracted from the left/right image steering angle. During the develpment of the CNN model, it is observed that left/right images are critical for the car to recover from off lane situations. Thus, it is important to develop a mathmatically sound formula f(camera_dist, car_speed) to calculate the steering angle biase value for left/right camera iamges. 
 
 * Adjust the distribution of training data based on road curvature. While collecting driving data, we can add a parameter for road curvature. Currently, lots of data frames are for straight road driving, which leads to overfitting in zero steering situation. By ploting the road curvature distribution, we can remove some straight driving data or augment curve driving data.
 
