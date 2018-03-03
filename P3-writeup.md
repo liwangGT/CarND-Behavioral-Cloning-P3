@@ -144,11 +144,13 @@ Since the top part and bottom part of the figure are irrelevant to the driving b
 ![flip][image4]
 
 To teach the car how to recover from off road conditions, the left and right cameras' data are also included into the data set. It is determined that a shift of 0.3 radiance should be added to the steering angle of the center image to get appropriate recovery behavior.
+
 ![left][image6]
 ![right][image7]
 
 
 It is found that a curvy part of the road is particularly difficult for the autonoumous car to deal with. The car almost always run off the road from this place. The reason might be that too much straight lane driving data is included. The learned driving behavior is overfitted to steering angle of 0. To overcome this issue more data are collected at the curvy parts of the road. A revere lap is also recorded avoid overfitting the left steering angle.
+
 ![curve][image8]
 
 
