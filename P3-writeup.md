@@ -23,6 +23,7 @@ The goals / steps of this project are the following:
 [image7]: ./examples/right.jpg "right"
 [image8]: ./examples/curve_road.png "curve"
 [image9]: ./examples/CNN_NVIDIA.png "CNN"
+[image10]: ./examples/youtube.png "video"
 
 
 ---
@@ -180,7 +181,9 @@ Epoch 5/5
 66048/66240 [============================>.] - ETA: 0s - loss: 0.0146Epoch 00004: val_loss improved from 0.01637 to 0.01597, saving model to Model_checkpoints/2018-03-02-model-weights.hdf5
 66240/66240 [==============================] - 243s - loss: 0.0146 - val_loss: 0.0160
 
+In the end, the trained CNN model can successfully steer the car to finish the complete track (note that the speed is of the car is regulated with a PI controller to 15 mph). The final video is in the youtube link below (click the figure).
 
+[![video][image10]](https://youtu.be/tubp4DvabnQ)
 
 
 
