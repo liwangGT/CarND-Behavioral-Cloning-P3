@@ -133,7 +133,7 @@ A illustration of the final CNN model is shown below.
 #### 3. Creation of the Training Set & Training Process
 Besides creating an approriate CNN model, a large part of effort is devoted to generate good training data for autonomous driving. Since the learned model can only do as good as the training data, producing excellent training data is cruicial to the success of the project.
 
-Two laps of counter clockwise driving data are recored as the initial training data. It is found that color information does not contribute too much to the training accuracy. So the training image are converted into grayscale image.
+Two laps of counter clockwise driving data are recored as the initial training data. It is found that color information does not contribute too much to the training accuracy. So the training image are converted into grayscale image to reducing total training time.
 
 ![example][image1]
 ![gray][image2]
